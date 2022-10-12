@@ -44,7 +44,7 @@ def main():
                                 "code": False,
                                 "color": "default"
                             },
-                            "plain_text": f"{item['properties']['Name']['title'][0]['text']['content']}",
+                            "plain_text": f"{item['properties']['Title']['rich_text'][0]['text']['content']} by {item['properties']['Author / Publisher / Brand']['rich_text'][0]['text']['content']}",
                             "href": None
                         }
                     ]
