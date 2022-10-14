@@ -53,6 +53,7 @@ def main():
         }
         update_attempt = requests.patch(url=f"https://api.notion.com/v1/pages/{item['id']}", json=payload, headers=headers).json()
         logging.info(update_attempt)
+        print(f"✅ Updated: {item['properties']['Title']['rich_text'][0]['text']['content']} by {item['properties']['Author / Publisher / Brand']['rich_text'][0]['text']['content']}")
 
 if __name__ == '__main__':
     main()
