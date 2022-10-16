@@ -33,7 +33,7 @@ def main():
                         {
                             "type": "text",
                             "text": {
-                                "content": f"{item['properties']['Title']['rich_text'][0]['text']['content'].title()} by {item['properties']['Author / Publisher / Brand']['rich_text'][0]['text']['content'].title()}",
+                                "content": f"{item['properties']['Title']['rich_text'][0]['text']['content']} by {item['properties']['Author / Publisher / Brand']['rich_text'][0]['text']['content']}",
                                 "link": None
                             },
                             "annotations": {
@@ -44,7 +44,7 @@ def main():
                                 "code": False,
                                 "color": "default"
                             },
-                            "plain_text": f"{item['properties']['Title']['rich_text'][0]['text']['content'].title()} by {item['properties']['Author / Publisher / Brand']['rich_text'][0]['text']['content'].title()}",
+                            "plain_text": f"{item['properties']['Title']['rich_text'][0]['text']['content']} by {item['properties']['Author / Publisher / Brand']['rich_text'][0]['text']['content']}",
                             "href": None
                         }
                     ]
@@ -53,7 +53,7 @@ def main():
         }
         update_attempt = requests.patch(url=f"https://api.notion.com/v1/pages/{item['id']}", json=payload, headers=headers).json()
         logging.info(update_attempt)
-        print(f"✅ Updated: {item['properties']['Title']['rich_text'][0]['text']['content'].title()} by {item['properties']['Author / Publisher / Brand']['rich_text'][0]['text']['content'].title()}")
+        print(f"✅ Updated: {item['properties']['Title']['rich_text'][0]['text']['content']} by {item['properties']['Author / Publisher / Brand']['rich_text'][0]['text']['content']}")
 
 if __name__ == '__main__':
     main()
