@@ -6,8 +6,6 @@ with open("../creds.json") as file:
     credentials = json.load(file)
 
 def main():
-    url = "https://api.notion.com/v1/databases/6449b9f514ae4ba9a0656f47d82fc28b/query"
-
     headers = {
         "accept": "application/json",
         "Notion-Version": "2022-06-28",
@@ -15,7 +13,25 @@ def main():
     }
 
     wishlist_items = requests.post(
-        url=url,
+        url="https://api.notion.com/v1/databases/6449b9f514ae4ba9a0656f47d82fc28b/query",
+        json = {
+            "filter" : {
+                "and": [
+                    {
+                        "property": "Christmas?",
+                        "checkbox": {
+                            "equals": True
+                        }
+                    },
+                    {
+                        "property": "Purchased",
+                        "checkbox": {
+                            "equals": False
+                        }
+                    },
+                ]
+            }
+        },
         headers=headers
     ).json()
 
@@ -23,6 +39,17 @@ def main():
         json.dump(wishlist_items, file, indent=4)
 
     for item in wishlist_items['results']:
+        
+        title = item['properties']['Title']['rich_text'][0]['text']['content']
+        author = item['properties']['Author / Publisher / Brand']['rich_text'][0]['text']['content']
+        
+        if title == title.upper() :
+            title = title.title()
+        if author == author.upper():
+            author = author.title()
+
+        new_title = f"{title} by {author}"
+        
         payload = {
             "properties": 
                 {
@@ -33,7 +60,7 @@ def main():
                         {
                             "type": "text",
                             "text": {
-                                "content": f"{item['properties']['Title']['rich_text'][0]['text']['content']} by {item['properties']['Author / Publisher / Brand']['rich_text'][0]['text']['content']}",
+                                "content": new_title,
                                 "link": None
                             },
                             "annotations": {
@@ -44,7 +71,7 @@ def main():
                                 "code": False,
                                 "color": "default"
                             },
-                            "plain_text": f"{item['properties']['Title']['rich_text'][0]['text']['content']} by {item['properties']['Author / Publisher / Brand']['rich_text'][0]['text']['content']}",
+                            "plain_text": new_title,
                             "href": None
                         }
                     ]
@@ -53,7 +80,7 @@ def main():
         }
         update_attempt = requests.patch(url=f"https://api.notion.com/v1/pages/{item['id']}", json=payload, headers=headers).json()
         logging.info(update_attempt)
-        print(f"✅ Updated: {item['properties']['Title']['rich_text'][0]['text']['content']} by {item['properties']['Author / Publisher / Brand']['rich_text'][0]['text']['content']}")
+        print(f"✅ Updated: {new_title}")
 
 if __name__ == '__main__':
     main()
